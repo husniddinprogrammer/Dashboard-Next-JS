@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Box,
   Drawer,
@@ -9,7 +9,9 @@ import {
   Card,
   CardContent,
   Typography,
-  Divider
+  Divider,
+  IconButton,
+  Tooltip
 } from '@mui/material'
 import {
   DashboardRounded,
@@ -18,10 +20,13 @@ import {
   FolderRounded,
   CalendarMonthRounded,
   TaskAltRounded,
-  SettingsRounded
+  SettingsRounded,
+  MenuOpenRounded,
+  MenuRounded
 } from '@mui/icons-material'
 
 const drawerWidth = 264
+const collapsedWidth = 72
 
 const navItems = [
   { icon: <DashboardRounded fontSize="small" />, label: 'Dashboard', active: true },
@@ -36,22 +41,30 @@ const navItems2 = [
   { icon: <SettingsRounded fontSize="small" />, label: 'Settings' },
 ]
 
-export default function Sidebar() {
+interface SidebarProps {
+  collapsed?: boolean
+  onToggle?: () => void
+}
+
+export default function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
   return (
     <Drawer
       variant="permanent"
       sx={{
-        width: drawerWidth,
+        width: collapsed ? collapsedWidth : drawerWidth,
         flexShrink: 0,
+        transition: 'width 0.3s ease',
         '& .MuiDrawer-paper': {
-          width: drawerWidth,
+          width: collapsed ? collapsedWidth : drawerWidth,
           boxSizing: 'border-box',
           backgroundColor: '#fff',
           borderRight: '1px solid #eef0f5',
+          transition: 'width 0.3s ease',
+          overflowX: 'hidden',
         },
       }}
     >
-      <Box sx={{ px: 3, py: 2.5, display: 'flex', alignItems: 'center', gap: 1.25 }}>
+      <Box sx={{ px: collapsed ? 1.5 : 3, py: 2.5, display: 'flex', alignItems: 'center', gap: collapsed ? 0 : 1.25, justifyContent: collapsed ? 'center' : 'flex-start' }}>
         <Box
           sx={{
             width: 28,
@@ -60,10 +73,12 @@ export default function Sidebar() {
             background: 'linear-gradient(135deg, #6C63FF, #5AD1FF)',
           }}
         />
-        <Typography sx={{ fontWeight: 800, letterSpacing: 0.2, color: '#3c4a6b' }}>Teamify</Typography>
+        {!collapsed && (
+          <Typography sx={{ fontWeight: 800, letterSpacing: 0.2, color: '#3c4a6b' }}>Teamify</Typography>
+        )}
       </Box>
 
-      <Box sx={{ px: 2 }}>
+      <Box sx={{ px: collapsed ? 1 : 2 }}>
         {navItems.map((i) => (
           <ListItemButton
             key={i.label}
@@ -71,17 +86,21 @@ export default function Sidebar() {
               borderRadius: 2,
               mb: 0.5,
               color: i.active ? '#6C63FF' : '#6b7280',
-              '& .MuiListItemIcon-root': { color: 'inherit', minWidth: 34 },
+              '& .MuiListItemIcon-root': { color: 'inherit', minWidth: collapsed ? 34 : 34, justifyContent: 'center' },
+              justifyContent: collapsed ? 'center' : 'flex-start',
+              px: collapsed ? 1 : 2,
               ...(i.active
                 ? { backgroundColor: 'rgba(108, 99, 255, 0.10)' }
                 : { '&:hover': { backgroundColor: '#f6f7fb' } }),
             }}
           >
             <ListItemIcon>{i.icon}</ListItemIcon>
-            <ListItemText
-              primaryTypographyProps={{ fontWeight: 600, fontSize: 14 }}
-              primary={i.label}
-            />
+            {!collapsed && (
+              <ListItemText
+                primaryTypographyProps={{ fontWeight: 600, fontSize: 14 }}
+                primary={i.label}
+              />
+            )}
           </ListItemButton>
         ))}
 
@@ -94,92 +113,123 @@ export default function Sidebar() {
               borderRadius: 2,
               mb: 0.5,
               color: '#6b7280',
-              '& .MuiListItemIcon-root': { color: 'inherit', minWidth: 34 },
+              '& .MuiListItemIcon-root': { color: 'inherit', minWidth: collapsed ? 34 : 34, justifyContent: 'center' },
+              justifyContent: collapsed ? 'center' : 'flex-start',
+              px: collapsed ? 1 : 2,
               '&:hover': { backgroundColor: '#f6f7fb' },
             }}
           >
             <ListItemIcon>{i.icon}</ListItemIcon>
-            <ListItemText
-              primaryTypographyProps={{ fontWeight: 600, fontSize: 14 }}
-              primary={i.label}
-            />
+            {!collapsed && (
+              <ListItemText
+                primaryTypographyProps={{ fontWeight: 600, fontSize: 14 }}
+                primary={i.label}
+              />
+            )}
           </ListItemButton>
         ))}
       </Box>
 
-      <Box sx={{ mt: 'auto', px: 2.5, pb: 2.5 }}>
-        <Card
-          sx={{
-            borderRadius: 3,
-            background: 'linear-gradient(180deg, rgba(108, 99, 255, 0.10), rgba(108, 99, 255, 0.06))',
-            border: '1px solid rgba(108, 99, 255, 0.10)',
-          }}
-          elevation={0}
-        >
-          <CardContent sx={{ px: 2, py: 2, '&:last-child': { pb: 2 }, textAlign: 'center' }}>
-            <Box sx={{ position: 'relative', height: 92, mb: 1.5 }}>
-              <Box
-                sx={{
-                  position: 'absolute',
-                  left: '50%',
-                  top: 0,
-                  transform: 'translateX(-50%)',
-                  width: 3,
-                  height: 26,
-                  borderRadius: 99,
-                  backgroundColor: 'rgba(108, 99, 255, 0.75)',
-                }}
-              />
+      {!collapsed && (
+        <Box sx={{ mt: 'auto', px: 2.5, pb: 2.5 }}>
+          <Card
+            sx={{
+              borderRadius: 3,
+              background: 'linear-gradient(180deg, rgba(108, 99, 255, 0.10), rgba(108, 99, 255, 0.06))',
+              border: '1px solid rgba(108, 99, 255, 0.10)',
+            }}
+            elevation={0}
+          >
+            <CardContent sx={{ px: 2, py: 2, '&:last-child': { pb: 2 }, textAlign: 'center' }}>
+              <Box sx={{ position: 'relative', height: 92, mb: 1.5 }}>
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    left: '50%',
+                    top: 0,
+                    transform: 'translateX(-50%)',
+                    width: 3,
+                    height: 26,
+                    borderRadius: 99,
+                    backgroundColor: 'rgba(108, 99, 255, 0.75)',
+                  }}
+                />
+
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    left: '50%',
+                    top: 18,
+                    transform: 'translateX(-50%)',
+                    width: 0,
+                    height: 0,
+                    borderLeft: '44px solid transparent',
+                    borderRight: '44px solid transparent',
+                    borderBottom: '58px solid rgba(108, 99, 255, 0.78)',
+                    filter: 'drop-shadow(0 12px 18px rgba(108, 99, 255, 0.25))',
+                  }}
+                />
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    left: '50%',
+                    top: 60,
+                    transform: 'translateX(-50%)',
+                    width: 74,
+                    height: 16,
+                    borderRadius: 999,
+                    background: 'radial-gradient(circle at 50% 45%, rgba(108,99,255,0.35), rgba(108,99,255,0.0) 70%)',
+                  }}
+                />
+              </Box>
 
               <Box
                 sx={{
-                  position: 'absolute',
-                  left: '50%',
-                  top: 18,
-                  transform: 'translateX(-50%)',
-                  width: 0,
-                  height: 0,
-                  borderLeft: '44px solid transparent',
-                  borderRight: '44px solid transparent',
-                  borderBottom: '58px solid rgba(108, 99, 255, 0.78)',
-                  filter: 'drop-shadow(0 12px 18px rgba(108, 99, 255, 0.25))',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  px: 2,
+                  py: 1,
+                  borderRadius: 2,
+                  backgroundColor: '#fff',
+                  color: '#6C63FF',
+                  fontWeight: 800,
+                  fontSize: 12,
+                  border: '1px solid rgba(108, 99, 255, 0.10)',
+                  boxShadow: '0 10px 20px rgba(17,24,39,0.06)',
+                  userSelect: 'none',
                 }}
-              />
-              <Box
-                sx={{
-                  position: 'absolute',
-                  left: '50%',
-                  top: 60,
-                  transform: 'translateX(-50%)',
-                  width: 74,
-                  height: 16,
-                  borderRadius: 999,
-                  background: 'radial-gradient(circle at 50% 45%, rgba(108,99,255,0.35), rgba(108,99,255,0.0) 70%)',
-                }}
-              />
-            </Box>
+              >
+                Share Your Thoughts
+              </Box>
+            </CardContent>
+          </Card>
+        </Box>
+      )}
 
-            <Box
-              sx={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                px: 2,
-                py: 1,
-                borderRadius: 2,
-                backgroundColor: '#fff',
-                color: '#6C63FF',
-                fontWeight: 800,
-                fontSize: 12,
-                border: '1px solid rgba(108, 99, 255, 0.10)',
-                boxShadow: '0 10px 20px rgba(17,24,39,0.06)',
-                userSelect: 'none',
-              }}
-            >
-              Share Your Thoughts
-            </Box>
-          </CardContent>
-        </Card>
+      {/* Toggle Button */}
+      <Box sx={{ position: 'absolute', right: -20, top: 80, zIndex: 1 }}>
+        <Tooltip title={collapsed ? 'Open sidebar' : 'Close sidebar'} placement="right">
+          <IconButton
+            onClick={onToggle}
+            sx={{
+              width: 40,
+              height: 40,
+              backgroundColor: '#6C63FF',
+              color: '#fff',
+              border: '2px solid #fff',
+              boxShadow: '0 4px 12px rgba(108, 99, 255, 0.3)',
+              '&:hover': {
+                backgroundColor: '#5A52E5',
+                transform: 'scale(1.05)',
+                boxShadow: '0 6px 16px rgba(108, 99, 255, 0.4)',
+              },
+              transition: 'all 0.2s ease',
+            }}
+          >
+            {collapsed ? <MenuOpenRounded /> : <MenuRounded />}
+          </IconButton>
+        </Tooltip>
       </Box>
     </Drawer>
   )
