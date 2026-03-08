@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useRouter } from 'next/router'
 import {
   Box,
   Drawer,
@@ -29,16 +30,49 @@ const drawerWidth = 264
 const collapsedWidth = 72
 
 const navItems = [
-  { icon: <DashboardRounded fontSize="small" />, label: 'Dashboard', active: true },
-  { icon: <GroupRounded fontSize="small" />, label: 'Teams' },
-  { icon: <BadgeRounded fontSize="small" />, label: 'Employees' },
-  { icon: <FolderRounded fontSize="small" />, label: 'Projects' },
+  { 
+    icon: <DashboardRounded fontSize="small" />, 
+    label: 'Boshqaruv paneli', 
+    path: '/dashboard'
+  },
+  { 
+    icon: <GroupRounded fontSize="small" />, 
+    label: 'Jamolar', 
+    path: '/teams'
+  },
+  { 
+    icon: <BadgeRounded fontSize="small" />, 
+    label: 'Xodimlar', 
+    path: '/employees'
+  },
+  { 
+    icon: <FolderRounded fontSize="small" />, 
+    label: 'Loyihalar', 
+    path: '/projects'
+  },
+  { 
+    icon: <BadgeRounded fontSize="small" />, 
+    label: 'Talabalar', 
+    path: '/students'
+  },
 ]
 
 const navItems2 = [
-  { icon: <CalendarMonthRounded fontSize="small" />, label: 'Meetings' },
-  { icon: <TaskAltRounded fontSize="small" />, label: 'Tasks' },
-  { icon: <SettingsRounded fontSize="small" />, label: 'Settings' },
+  { 
+    icon: <CalendarMonthRounded fontSize="small" />, 
+    label: 'Yig\'ilishlar', 
+    path: '/meetings'
+  },
+  { 
+    icon: <TaskAltRounded fontSize="small" />, 
+    label: 'Vazifalar', 
+    path: '/tasks'
+  },
+  { 
+    icon: <SettingsRounded fontSize="small" />, 
+    label: 'Sozlamalar', 
+    path: '/settings'
+  },
 ]
 
 interface SidebarProps {
@@ -47,6 +81,12 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
+  const router = useRouter()
+  const currentPath = router.pathname
+
+  const handleNavigation = (path: string) => {
+    router.push(path)
+  }
   return (
     <Drawer
       variant="permanent"
@@ -82,14 +122,15 @@ export default function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
         {navItems.map((i) => (
           <ListItemButton
             key={i.label}
+            onClick={() => handleNavigation(i.path)}
             sx={{
               borderRadius: 2,
               mb: 0.5,
-              color: i.active ? '#6C63FF' : '#6b7280',
+              color: currentPath === i.path ? '#6C63FF' : '#6b7280',
               '& .MuiListItemIcon-root': { color: 'inherit', minWidth: collapsed ? 34 : 34, justifyContent: 'center' },
               justifyContent: collapsed ? 'center' : 'flex-start',
               px: collapsed ? 1 : 2,
-              ...(i.active
+              ...(currentPath === i.path
                 ? { backgroundColor: 'rgba(108, 99, 255, 0.10)' }
                 : { '&:hover': { backgroundColor: '#f6f7fb' } }),
             }}
@@ -109,14 +150,17 @@ export default function Sidebar({ collapsed = false, onToggle }: SidebarProps) {
         {navItems2.map((i) => (
           <ListItemButton
             key={i.label}
+            onClick={() => handleNavigation(i.path)}
             sx={{
               borderRadius: 2,
               mb: 0.5,
-              color: '#6b7280',
+              color: currentPath === i.path ? '#6C63FF' : '#6b7280',
               '& .MuiListItemIcon-root': { color: 'inherit', minWidth: collapsed ? 34 : 34, justifyContent: 'center' },
               justifyContent: collapsed ? 'center' : 'flex-start',
               px: collapsed ? 1 : 2,
-              '&:hover': { backgroundColor: '#f6f7fb' },
+              ...(currentPath === i.path
+                ? { backgroundColor: 'rgba(108, 99, 255, 0.10)' }
+                : { '&:hover': { backgroundColor: '#f6f7fb' } }),
             }}
           >
             <ListItemIcon>{i.icon}</ListItemIcon>
