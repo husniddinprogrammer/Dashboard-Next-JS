@@ -1,13 +1,24 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 import { Box, Typography } from '@mui/material'
 import Link from 'next/link'
 import DashboardLayout from '../../../components/layout.js/DashboardLayout'
-import { getTeamById } from '@/data/teams'
+import { getTeamById } from '@/api'
 
 type PageProps = {
   id: string
 }
+type TeamMember = {
+  id: string
+  name: string
+  role: string
+}
+type Team = {
+  id: string
+  name: string
+  members: TeamMember[]
+}
+
 
 export const getServerSideProps: GetServerSideProps<PageProps> = async (ctx) => {
   const idParam = ctx.params?.id
@@ -27,10 +38,29 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (ctx) => 
   }
 }
 
+
 export default function TeamDetailsPage({
   id,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const team = getTeamById(id)
+  
+  const [team, setTeam] = useState<Team | null>(null)
+    const [loading, setLoading] = useState(true)
+  
+    useEffect(() => {
+      const fetchTeam = async () => {
+        try {
+          const teamData = await getTeamById(id)
+          setTeam(teamData)
+        } catch (error) {
+          console.error('Error loading team:', error)
+        } finally {
+          setLoading(false)
+        }
+      }
+  
+      fetchTeam()
+    }, [id])
+
 
   if (!team) {
     return (
@@ -57,11 +87,11 @@ export default function TeamDetailsPage({
           A'zolar: {team.members.length} ta
         </Typography>
 
-        {team.members.map((m) => (
-          <Box key={m.id} sx={{ mb: 1 }}>
-            <Typography sx={{ fontWeight: 600 }}>{m.name}</Typography>
+        {team.members.map((member) => (
+          <Box key={member.id} sx={{ mb: 1 }}>
+            <Typography sx={{ fontWeight: 600 }}>{member.name}</Typography>
             <Typography variant="body2" color="text.secondary">
-              {m.role}
+              {member.role}
             </Typography>
           </Box>
         ))}

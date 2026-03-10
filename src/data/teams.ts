@@ -12,7 +12,7 @@ export type Team = {
 
 export const teams: Team[] = [
   {
-    id: 'frontend',
+    id: '1',
     name: 'Frontend Team',
     members: [
       { id: 'u1', name: 'Ali Karimov', role: 'React Developer' },
@@ -21,7 +21,7 @@ export const teams: Team[] = [
     ],
   },
   {
-    id: 'backend',
+    id: '2',
     name: 'Backend Team',
     members: [
       { id: 'u4', name: 'Sardor Rahimov', role: 'Node.js Developer' },
@@ -29,16 +29,8 @@ export const teams: Team[] = [
     ],
   },
   {
-    id: 'mobile',
+    id: '3',
     name: 'Mobile Team',
     members: [{ id: 'u6', name: 'Umidjon Tursunov', role: 'Flutter Developer' }],
   },
 ]
-
-export function getTeams(): Team[] {
-  return teams
-}
-
-export function getTeamById(id: string): Team | undefined {
-  return teams.find((t) => t.id === id)
-}

@@ -12,11 +12,13 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "^6.11.4",
-    "@mui/material": "^6.11.4",
-    "@mui/styled-engine-sc": "^6.11.4",
-    "@mui/system": "^6.11.4",
-    "@mui/utils": "^6.11.4",
+    "@mui/icons-material": "^7.3.9",
+    "@mui/material": "^7.3.9",
+    "@mui/styled-engine-sc": "^7.3.9",
+    "@mui/system": "^7.3.9",
+    "@mui/utils": "^7.3.9",
+    "@mui/x-charts": "^7.3.9",
+    "axios": "^1.7.9",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3"

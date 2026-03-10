@@ -2,11 +2,38 @@ import React from 'react'
 import { Box, Typography } from '@mui/material'
 import Link from 'next/link'
 import DashboardLayout from '../../components/layout.js/DashboardLayout'
-import { getTeams } from '@/data/teams'
+import { getTeams } from '@/api'
+import type { GetStaticProps, InferGetStaticPropsType } from 'next'
 
-export default function TeamsPage() {
-  const teams = getTeams()
+type TeamMember = {
+  id: string
+  name: string
+  role: string
+}
 
+type Team = {
+  id: string
+  name: string
+  members: TeamMember[]
+}
+
+type PageProps = {
+  teams: Team[]
+}
+
+export const getStaticProps: GetStaticProps<PageProps> = async () => {
+  const teams = await getTeams()
+  
+  return {
+    props: {
+      teams,
+    },
+  }
+}
+
+export default function TeamsPage({
+  teams,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <DashboardLayout>
       <Box sx={{ p: 3 }}>
