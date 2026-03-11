@@ -1,7 +1,7 @@
 import { log } from "console"
 
-// const baseURL = 'http://localhost:3000/api'
-const baseURL = 'https://dashboard-next-js-omega-sooty.vercel.app/api'
+const baseURL = 'http://localhost:3000/api'
+// const baseURL = 'https://dashboard-next-js-omega-sooty.vercel.app/api'
 
 export const getTeams = async () => {
     try {

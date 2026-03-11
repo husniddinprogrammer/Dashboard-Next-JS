@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material'
 import Link from 'next/link'
 import DashboardLayout from '../../components/layout.js/DashboardLayout'
 import { getTeams } from '@/api'
-import type { GetStaticProps, InferGetStaticPropsType } from 'next'
+import type { GetServerSideProps, InferGetServerSidePropsType } from 'next'
 
 type TeamMember = {
   id: string
@@ -21,7 +21,7 @@ type PageProps = {
   teams: Team[]
 }
 
-export const getStaticProps: GetStaticProps<PageProps> = async () => {
+export const getServerSideProps: GetServerSideProps<PageProps> = async () => {
   const teams = await getTeams()
   
   return {
@@ -33,7 +33,7 @@ export const getStaticProps: GetStaticProps<PageProps> = async () => {
 
 export default function TeamsPage({
   teams,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <DashboardLayout>
       <Box sx={{ p: 3 }}>
