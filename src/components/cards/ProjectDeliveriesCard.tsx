@@ -55,7 +55,7 @@ export default function ProjectDeliveriesCard() {
             grid={{ horizontal: true, vertical: false }}
             margin={{ top: 20, right: 16, bottom: 34, left: 26 }}
             slotProps={{
-              legend: { position: { vertical: 'top', horizontal: 'end' } },
+              legend: { position: { vertical: 'top', horizontal: 'right' } },
             }}
             sx={{
               '.MuiChartsAxis-line': { display: 'none' },
